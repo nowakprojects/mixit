@@ -2,17 +2,13 @@ package mixit.repository
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import mixit.model.Talk
 import mixit.model.Ticket
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate
-import org.springframework.data.mongodb.core.count
-import org.springframework.data.mongodb.core.findAll
+import org.springframework.data.mongodb.core.*
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.isEqualTo
-import org.springframework.data.mongodb.core.remove
 import org.springframework.stereotype.Repository
 
 
@@ -42,4 +38,7 @@ class TicketRepository(private val template: ReactiveMongoTemplate,
     fun deleteAll() = template.remove<Ticket>(Query())
 
     fun deleteOne(id: String) = template.remove<Ticket>(Query(Criteria.where("_id").isEqualTo(id)))
+
+    fun findByEmail(email: String) = template.findOne<Ticket>(Query(Criteria.where("email").isEqualTo(email)))
+
 }
